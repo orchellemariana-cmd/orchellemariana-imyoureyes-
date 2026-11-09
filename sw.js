@@ -1,4 +1,4 @@
-const CACHE = "eyes-v3";
+const CACHE = "eyes-v4";
 const SHELL = ["/", "/index.html", "/style.css", "/lao.js", "/detect.js", "/app.js", "/manifest.webmanifest", "/icon.svg", "/model/labels.json"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL))); self.skipWaiting(); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(k => Promise.all(k.filter(x => x !== CACHE).map(x => caches.delete(x)))).then(() => self.clients.claim())); });

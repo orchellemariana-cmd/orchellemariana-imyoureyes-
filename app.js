@@ -189,6 +189,27 @@ async function loadModel() {
   }
 }
 
+let torchOn = false;
+function setupTorch() {
+  try {
+    const track = stream.getVideoTracks()[0];
+    const caps = track.getCapabilities ? track.getCapabilities() : {};
+    if (!caps.torch) return;                       // e.g. iPhone Safari: no light control
+    const btn = $("light");
+    btn.hidden = false;
+    btn.onclick = async () => {
+      torchOn = !torchOn;
+      try { await track.applyConstraints({ advanced: [{ torch: torchOn }] }); }
+      catch (e) { torchOn = !torchOn; return; }
+      btn.textContent = torchOn ? "🔦 ON" : "🔦 OFF";
+      btn.classList.toggle("on", torchOn);
+      buzz(80);
+      if (hasLaoVoice()) say(torchOn ? "ເປີດໄຟ" : "ປິດໄຟ", "lo-LA");
+      else say(torchOn ? "Light on" : "Light off", "en-US");
+    };
+  } catch (e) {}
+}
+
 async function start() {
   player.src = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
   player.play().catch(() => {});                          // unlocks sound on iPhone
@@ -201,6 +222,7 @@ async function start() {
     $("start").hidden = true; $("demo").hidden = false; return;
   }
   $("start").hidden = true; $("tap").hidden = false;
+  setupTorch();
   speakWord("ready");
   loop();
 }

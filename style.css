@@ -16,3 +16,6 @@ canvas{pointer-events:none}
 #start .sub{font-size:26px;font-weight:500;opacity:.85}
 
 [hidden]{display:none !important}
+#light{position:absolute;top:calc(env(safe-area-inset-top,0px) + 66px);right:12px;height:64px;min-width:96px;padding:0 14px;border-radius:18px;border:0;background:#334155;color:#fff;font-size:20px;font-weight:700}
+#light.on{background:#facc15;color:#1c1917}
+#demo,#light{z-index:2}
